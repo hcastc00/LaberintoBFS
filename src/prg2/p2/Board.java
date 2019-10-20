@@ -8,11 +8,19 @@ public class Board {
 	public int size;
 	public String[][] board;
 
+	/*
+	 * Contructor de la clase Board
+	 * Crea un tablero de Strings con el tamaño dado
+	 */
 	public Board(int size) {
 		this.size = size;
 		this.board = new String [size][size];
 	}
 
+	
+	/*
+	 * Lee el tablero
+	 */
 	public void readBoard() {
 		Scanner sc = new Scanner(System.in);
 		String input;
