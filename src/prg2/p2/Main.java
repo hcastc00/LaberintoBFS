@@ -13,10 +13,8 @@ public class Main {
 
 		Board board = new Board(3);
 		board.readBoard();
-		board.print2D();
+		board.solve();
 
-		Box test = new Box(1,2);
-		System.out.println(test);
 	}
 
 	
