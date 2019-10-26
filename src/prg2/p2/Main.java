@@ -6,15 +6,15 @@ import java.util.Scanner;
 public class Main {
 
 	public static void main(String[] args) {
-		System.out.println("Introduce el tamaño del laberinto: ");
-//		Scanner sc = new Scanner(System.in);
-//		int size = sc.nextInt();
-//		sc.close();
-
-		Board board = new Board(3);
+		Scanner sc = new Scanner(System.in);
+		int size = sc.nextInt();
+		//Clear buffer
+		sc.hasNextLine();
+		System.out.println(size);
+		Board board = new Board(size);
 		board.readBoard();
 		board.solve();
-
+		sc.close();
 	}
 
 	
