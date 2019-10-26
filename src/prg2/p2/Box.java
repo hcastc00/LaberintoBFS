@@ -10,11 +10,9 @@ public class Box {
     }
 
     public String toString() {
-        final StringBuffer sb = new StringBuffer();
-        sb.append("(").append(x+1);
-        sb.append(",").append(y+1);
-        sb.append(')');
-        return sb.toString();
+        return "(" + (x + 1) +
+                "," + (y + 1) +
+                ')';
     }
 
 

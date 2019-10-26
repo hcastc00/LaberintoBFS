@@ -2,29 +2,25 @@ package prg2.p2;
 
 import java.util.*;
 
-public class Board {
-    int[] dy = {1, -1, 0, 0, 1, 1, -1, -1};
-    int[] dx = {0, 0, 1, -1, 1, -1, -1, 1};
-    boolean[][] visited;
-    int size;
+class Board {
+    private int[] dy = {1, -1, 0, 0, 1, 1, -1, -1};
+    private int[] dx = {0, 0, 1, -1, 1, -1, -1, 1};
+    private boolean[][] visited;
+    private int size;
     private char[][] board;
-    public Queue<Box> nodes = new LinkedList<Box>();
-    public StringBuffer solPrint = new StringBuffer();
-    public int nodesNextLayer = 0;
-    public int nodesLeftLayer = 1;
-    public boolean foundExit = false;
-    public int movements = 0;
-    public Queue<Box> path = new LinkedList<Box>();
+    private Queue<Box> nodes = new LinkedList<Box>();
+    private int nodesNextLayer = 0;
+    private boolean foundExit = false;
+    private Queue<Box> path = new LinkedList<Box>();
 
     /*
      * Contructor de la clase Board
      * Crea un tablero de Strings con el tamaño dado
      */
-    public Board(int size) {
+    Board(int size) {
         this.size = size;
         this.board = new char[size][size];
         this.visited = new boolean[size][size];
-        Box[] path = new Box[1000];
 
         for (int y = 0; y < this.size; y++) {
             for (int x = 0; x < this.size; x++) {
@@ -36,19 +32,20 @@ public class Board {
     /*
      * Lee el tablero
      */
-    public void readBoard() {
+    void readBoard() {
         Scanner sc = new Scanner(System.in);
-        String input;
+        String input = null;
 
         for (int y = 0; y < this.size; y++) {
-            input = sc.nextLine();
-            for (int x = 0; x < this.size; x++) {
-                this.board[y][x] = input.charAt(x);
+            if(sc.hasNextLine()) {
+                input = sc.nextLine();
+                for (int x = 0; x < this.size; x++) {
+                    this.board[y][x] = input.charAt(x);
+                }
             }
         }
-        sc.close();
 
-        if (this.board[0][0]!='0' || this.board[this.size-1][this.size-1]!='0') noExit();
+        if (this.board[0][0] != '0' || this.board[this.size - 1][this.size - 1] != '0') noExit();
     }
 
     private boolean existsPrice() {
@@ -81,8 +78,8 @@ public class Board {
         return price;
     }
 
-    public void solve() {
-        StringBuffer out = new StringBuffer();
+    void solve() {
+        StringBuilder out = new StringBuilder();
         if (this.existsPrice()) {
             int priceX = this.wherePrice().x;
             int priceY = this.wherePrice().y;
@@ -104,10 +101,10 @@ public class Board {
                     //Print required data
                     path.poll();
                     while (this.path.size() > 0) {
-                        out.append(path.poll() + " ");
+                        out.append(path.poll()).append(" ");
                     }
                     System.out.println(out.toString());
-                }else
+                } else
                     this.noExit();
             }
             //No path to price
@@ -143,9 +140,8 @@ public class Board {
         path.clear();
         nodes.clear();
         nodesNextLayer = 0;
-        nodesLeftLayer = 1;
+        int nodesLeftLayer = 1;
         foundExit = false;
-        movements = 0;
         for (int y = 0; y < this.size; y++) {
             for (int x = 0; x < this.size; x++) {
                 this.visited[y][x] = false;
@@ -156,20 +152,19 @@ public class Board {
         this.nodes.add(start);
         this.visited[yStart][xStart] = true;
         Box node;
-        while  (this.nodes.size()>0) {
+        while (this.nodes.size() > 0) {
             node = this.nodes.poll();
             if (this.board[node.y][node.x] == 'e') {
-                this.path.add(new Box(node.x,node.y));
+                this.path.add(new Box(node.x, node.y));
                 this.foundExit = true;
                 break;
             }
             exploreNeighbours(node.y, node.x);
             nodesLeftLayer--;
             if (nodesLeftLayer == 0) {
-                this.path.add(new Box(node.x,node.y));
+                this.path.add(new Box(node.x, node.y));
                 nodesLeftLayer = nodesNextLayer;
                 nodesNextLayer = 0;
-                movements++;
             }
         }
     }

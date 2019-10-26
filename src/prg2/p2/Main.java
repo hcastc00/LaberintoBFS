@@ -10,7 +10,6 @@ public class Main {
 		int size = sc.nextInt();
 		//Clear buffer
 		sc.hasNextLine();
-		System.out.println(size);
 		Board board = new Board(size);
 		board.readBoard();
 		board.solve();
