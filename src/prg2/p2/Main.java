@@ -9,14 +9,12 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 		int size = sc.nextInt();
 		//Clear buffer
-		sc.hasNextLine();
-		Board board = new Board(size);
+		sc.nextLine();
+		Board board = new Board(size, sc);
 		board.readBoard();
 		board.solve();
 		sc.close();
 	}
 
-	
-	
-	
+
 }

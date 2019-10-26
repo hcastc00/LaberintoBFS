@@ -3,25 +3,33 @@ package prg2.p2;
 import java.util.*;
 
 class Board {
+    //Movement vector
     private int[] dy = {1, -1, 0, 0, 1, 1, -1, -1};
     private int[] dx = {0, 0, 1, -1, 1, -1, -1, 1};
+
+    //Matrix representing visited boxes in the maze
     private boolean[][] visited;
+
+    //Boards size
     private int size;
+
     private char[][] board;
     private Queue<Box> nodes = new LinkedList<Box>();
     private int nodesNextLayer = 0;
     private boolean foundExit = false;
     private Queue<Box> path = new LinkedList<Box>();
+    private Scanner sc;
 
     /*
-     * Contructor de la clase Board
-     * Crea un tablero de Strings con el tamaño dado
+     * Board constructor
+     * Creates a char[][] matrix representing a 2D maze
      */
-    Board(int size) {
+    Board(int size, Scanner sc) {
         this.size = size;
         this.board = new char[size][size];
         this.visited = new boolean[size][size];
-
+        this.sc = sc;
+        //Initialize the visited matrix to all false
         for (int y = 0; y < this.size; y++) {
             for (int x = 0; x < this.size; x++) {
                 this.visited[y][x] = false;
@@ -29,25 +37,20 @@ class Board {
         }
     }
 
-    /*
-     * Lee el tablero
-     */
+    //Reads the board and checks that [0][0] and [size-1][size-1] (start and end) are 0 (reachable)
     void readBoard() {
-        Scanner sc = new Scanner(System.in);
-        String input = null;
-
+        String input;
         for (int y = 0; y < this.size; y++) {
-            if(sc.hasNextLine()) {
-                input = sc.nextLine();
-                for (int x = 0; x < this.size; x++) {
-                    this.board[y][x] = input.charAt(x);
-                }
+            input = sc.nextLine();
+            for (int x = 0; x < this.size; x++) {
+                this.board[y][x] = input.charAt(x);
             }
         }
 
         if (this.board[0][0] != '0' || this.board[this.size - 1][this.size - 1] != '0') noExit();
     }
 
+    //Checks if a price is existent
     private boolean existsPrice() {
         boolean out = false;
         for (int y = 0; y < this.size; y++) {
@@ -59,10 +62,6 @@ class Board {
             }
         }
         return out;
-    }
-
-    private boolean visited(int y, int x) {
-        return this.visited[y][x];
     }
 
     //	Returns the position of the price * in the board
@@ -78,6 +77,7 @@ class Board {
         return price;
     }
 
+    //Manages the solving steps taking into account the price and if is reachable
     void solve() {
         StringBuilder out = new StringBuilder();
         if (this.existsPrice()) {
@@ -100,9 +100,10 @@ class Board {
                 if (foundExit) {
                     //Print required data
                     path.poll();
-                    while (this.path.size() > 0) {
+                    while (this.path.size() > 1) {
                         out.append(path.poll()).append(" ");
                     }
+                    out.append(path.poll());
                     System.out.println(out.toString());
                 } else
                     this.noExit();
@@ -115,13 +116,15 @@ class Board {
                 //Print the required data
                 if (foundExit) {
                     System.out.println("SI, SIN PREMIO.");
-                    while (this.path.size() > 0) {
+                    while (this.path.size() > 1) {
                         System.out.print(path.poll() + " ");
                     }
+                    out.append(path.poll());
                 } else this.noExit();
             }
-
-        } else {
+        }
+        //No price
+        else {
             this.board[this.size - 1][this.size - 1] = 'e';
             this.solveBFS(0, 0);
 
@@ -136,6 +139,7 @@ class Board {
         }
     }
 
+    //Solves the maze using a BFS algorithm that search for a box with an 'e' (exit) from a given starting point
     private void solveBFS(int xStart, int yStart) {
         path.clear();
         nodes.clear();
@@ -169,6 +173,7 @@ class Board {
         }
     }
 
+    //Creates new nodes with the possible movements
     private void exploreNeighbours(int y, int x) {
         int yy, xx;
         Box box;
@@ -178,7 +183,7 @@ class Board {
 
             //Check that the position is inside the board, isnt visited and isnt a wall
             if (yy < 0 || xx < 0 || yy >= this.size || xx >= this.size) continue;
-            if (this.visited(yy, xx)) continue;
+            if (this.visited[yy][xx]) continue;
             if (this.board[yy][xx] == '1') continue;
 
             box = new Box(xx, yy);
@@ -189,6 +194,7 @@ class Board {
 
     }
 
+    //Prints NO.
     private void noExit() {
         System.out.println("NO.");
         System.exit(0);

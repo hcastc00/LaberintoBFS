@@ -4,7 +4,7 @@ public class Box {
     int x;
     int y;
 
-    Box(int x, int y){
+    Box(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -14,8 +14,4 @@ public class Box {
                 "," + (y + 1) +
                 ')';
     }
-
-
-
-
 }
